@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "System users including SuperAdmin, Admin, Teacher, and Parent.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["superadmin", "admin", "assistant", "teacher", "parent"] },
+        "schoolId": { "type": "string", "description": "ID of the school this user belongs to" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "content": {
+      "title": "Landing Content",
+      "description": "Dynamic content for the landing page.",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "motto": { "type": "string" },
+        "announcements": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "schools": {
+      "title": "School",
+      "description": "Educational institutions managed by the system.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "ownerId": { "type": "string", "description": "UID of the Admin user who owns the school" },
+        "address": { "type": "string" },
+        "config": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "ownerId"]
+    },
+    "students": {
+      "title": "Student",
+      "description": "Students enrolled in a school.",
+      "type": "object",
+      "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "parentId": { "type": "string", "description": "UID of the parent user" },
+        "grade": { "type": "string" },
+        "section": { "type": "string" },
+        "active": { "type": "boolean" }
+      },
+      "required": ["firstName", "lastName", "schoolId", "parentId"]
+    },
+    "grades": {
+      "title": "Grade",
+      "description": "Academic grades for students.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "subject": { "type": "string" },
+        "score": { "type": "number" },
+        "term": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subject", "score", "term"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "users",
+      "description": "User profiles and roles"
+    },
+    "/schools/{schoolId}": {
+      "schema": "schools",
+      "description": "School information"
+    },
+    "/students/{studentId}": {
+      "schema": "students",
+      "description": "Student records"
+    },
+    "/grades/{gradeId}": {
+      "schema": "grades",
+      "description": "Academic grades"
+    }
+  }
+}
