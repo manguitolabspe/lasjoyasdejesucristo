@@ -25,8 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthReady, setIsAuthReady] = useState(false);
 
   useEffect(() => {
-    // Check local storage for simulated session
-    const savedUser = localStorage.getItem('demo_user');
+    // Check local storage for active session
+    const savedUser = localStorage.getItem('joyas_session');
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = (email: string, role: string = 'parent') => {
     const mockUser = {
-      uid: `demo-${role}-${Date.now()}`,
+      uid: `${role}-${Date.now()}`,
       email: email,
       displayName: email.split('@')[0],
       role: role,
@@ -46,13 +46,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     setUser(mockUser);
     setUserData(mockUser);
-    localStorage.setItem('demo_user', JSON.stringify(mockUser));
+    localStorage.setItem('joyas_session', JSON.stringify(mockUser));
   };
 
   const logout = () => {
     setUser(null);
     setUserData(null);
-    localStorage.removeItem('demo_user');
+    localStorage.removeItem('joyas_session');
   };
 
   return (

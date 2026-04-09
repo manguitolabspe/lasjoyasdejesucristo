@@ -22,8 +22,11 @@ import {
   Pencil,
   Rocket,
   Menu,
-  X
+  X,
+  User
 } from "lucide-react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserGraduate, faUserTie, faUserCircle, faChild } from '@fortawesome/free-solid-svg-icons';
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
@@ -67,10 +70,14 @@ export default function App() {
   const { user, userData, loading, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMatriculaOpen, setIsMatriculaOpen] = React.useState(false);
+  const [isTermsOpen, setIsTermsOpen] = React.useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = React.useState(false);
+  const [isReclamacionesOpen, setIsReclamacionesOpen] = React.useState(false);
   const [landingContent, setLandingContent] = React.useState<any>({
     heroTitle: '¡Aprende, Juega y Crece con Nosotros!',
     heroSubtitle: 'Brindamos una educación de excelencia en Talara Alta, donde cada niño es una joya preciosa que pulimos con amor y sabiduría.',
-    motto: 'Educación con Amor y Disciplina'
+    motto: 'Educación con Amor y Disciplina',
+    logoUrl: '/logo.webp'
   });
   
   const levels = [
@@ -114,13 +121,13 @@ export default function App() {
       name: "María Fernández",
       role: "Madre de Familia",
       text: "El cambio en mi hijo ha sido increíble. Los profesores son muy dedicados y el ambiente es muy familiar.",
-      avatar: "https://picsum.photos/seed/user1/100/100"
+      icon: faUserCircle
     },
     {
       name: "Juan Pérez",
       role: "Padre de Familia",
       text: "Excelente nivel académico. Mi hija ingresó a la universidad gracias a la preparación que recibió aquí.",
-      avatar: "https://picsum.photos/seed/user2/100/100"
+      icon: faUserTie
     }
   ];
 
@@ -147,12 +154,16 @@ export default function App() {
         <nav className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-md">
           <div className="container mx-auto px-4 h-20 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <motion.div 
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-12 h-12 bg-school-blue rounded-2xl flex items-center justify-center text-white font-heading font-bold text-2xl shadow-lg shadow-school-blue/30"
-              >
-                J
-              </motion.div>
+              {landingContent.logoUrl ? (
+                <img src={landingContent.logoUrl} alt="Logo" className="h-12 w-auto object-contain" referrerPolicy="no-referrer" />
+              ) : (
+                <motion.div 
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="w-12 h-12 bg-school-blue rounded-sm flex items-center justify-center text-white font-heading font-bold text-2xl shadow-lg shadow-school-blue/30"
+                >
+                  J
+                </motion.div>
+              )}
               <div className="flex flex-col">
                 <span className="font-heading font-bold text-xl leading-none text-school-blue">
                   I.E.P. Las Joyas
@@ -166,7 +177,7 @@ export default function App() {
               {["Inicio", "Niveles", "Talleres", "Nosotros", "Contacto"].map((item) => (
                 <a 
                   key={item}
-                  href={`#${item.toLowerCase()}`} 
+                  href={item === "Nosotros" ? "#nosotros" : `#${item.toLowerCase()}`} 
                   className="text-sm font-bold hover:text-school-blue transition-colors relative group"
                 >
                   {item}
@@ -262,7 +273,13 @@ export default function App() {
                         Entrar
                       </Button>
                     </LoginModal>
-                    <Button className="w-full bg-school-red text-white rounded-xl font-bold">
+                    <Button 
+                      className="w-full bg-school-red text-white rounded-xl font-bold"
+                      onClick={() => {
+                        setIsMatriculaOpen(true);
+                        setIsMenuOpen(false);
+                      }}
+                    >
                       Matrícula 2026
                     </Button>
                   </div>
@@ -322,10 +339,19 @@ export default function App() {
                 {landingContent.heroSubtitle}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <Button size="lg" className="bg-school-blue hover:bg-school-blue/90 text-white text-xl px-10 py-8 rounded-3xl shadow-xl shadow-school-blue/30 group transform hover:-translate-y-1 transition-all">
+                <Button 
+                  size="lg" 
+                  className="bg-school-blue hover:bg-school-blue/90 text-white text-xl px-10 py-8 rounded-3xl shadow-xl shadow-school-blue/30 group transform hover:-translate-y-1 transition-all"
+                  onClick={() => setIsMatriculaOpen(true)}
+                >
                   ¡Inscríbete Hoy! <ChevronRight className="ml-2 w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </Button>
-                <Button size="lg" variant="outline" className="text-xl px-10 py-8 rounded-3xl border-4 border-school-yellow text-school-blue font-bold hover:bg-school-yellow/10 transition-all">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-xl px-10 py-8 rounded-3xl border-4 border-school-yellow text-school-blue font-bold hover:bg-school-yellow/10 transition-all"
+                  onClick={() => document.getElementById('niveles')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Conoce el Colegio
                 </Button>
               </div>
@@ -339,7 +365,7 @@ export default function App() {
             >
               <div className="relative z-20 bg-white p-4 rounded-2xl shadow-2xl border-2 border-muted overflow-hidden">
                 <img 
-                  src="https://picsum.photos/seed/happykids/1200/600" 
+                  src="/hero-kids.webp" 
                   alt="Niños felices aprendiendo" 
                   className="w-full h-full object-cover rounded-2xl"
                   referrerPolicy="no-referrer"
@@ -357,7 +383,7 @@ export default function App() {
         </section>
 
         {/* Academic Excellence Section */}
-        <section className="py-24 bg-muted/30 relative">
+        <section id="nosotros" className="py-24 bg-muted/30 relative">
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <div className="flex-1 space-y-8">
@@ -392,18 +418,18 @@ export default function App() {
               <div className="flex-1 grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div className="h-64 bg-school-blue/20 rounded-2xl flex items-center justify-center overflow-hidden">
-                    <img src="https://picsum.photos/seed/edu1/300/400" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <img src="/edu-excellence-1.webp" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                   <div className="h-48 bg-school-yellow/20 rounded-2xl flex items-center justify-center overflow-hidden">
-                    <img src="https://picsum.photos/seed/edu2/300/300" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <img src="/edu-excellence-2.webp" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                 </div>
                 <div className="space-y-4 pt-12">
-                  <div className="h-48 bg-school-red/20 rounded-2xl flex items-center justify-center overflow-hidden">
-                    <img src="https://picsum.photos/seed/edu3/300/300" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <div className="h-48 bg-school-red/20 rounded-sm flex items-center justify-center overflow-hidden">
+                    <img src="/edu-excellence-3.webp" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
-                  <div className="h-64 bg-school-green/20 rounded-2xl flex items-center justify-center overflow-hidden">
-                    <img src="https://picsum.photos/seed/edu4/300/400" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <div className="h-64 bg-school-green/20 rounded-sm flex items-center justify-center overflow-hidden">
+                    <img src="/edu-excellence-4.webp" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                 </div>
               </div>
@@ -420,9 +446,9 @@ export default function App() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="md:col-span-2 bg-school-blue/5 p-10 rounded-2xl border-2 border-school-blue/10 flex flex-col justify-between">
+              <div className="md:col-span-2 bg-school-blue/5 p-10 rounded-sm border-2 border-school-blue/10 flex flex-col justify-between">
                 <div>
-                  <div className="w-16 h-16 bg-school-blue rounded-2xl flex items-center justify-center text-white mb-6">
+                  <div className="w-16 h-16 bg-school-blue rounded-sm flex items-center justify-center text-white mb-6">
                     <Sparkles className="w-8 h-8" />
                   </div>
                   <h3 className="text-3xl font-heading font-bold mb-4 text-slate-900">Aprendizaje Significativo</h3>
@@ -432,29 +458,29 @@ export default function App() {
                 </div>
                 <div className="mt-8 flex -space-x-4">
                   {[1,2,3,4].map(i => (
-                    <img key={i} src={`https://picsum.photos/seed/face${i}/100/100`} className="w-12 h-12 rounded-full border-4 border-white object-cover" referrerPolicy="no-referrer" />
+                    <img key={i} src={`/student-face-${i}.webp`} className="w-12 h-12 rounded-full border-4 border-white object-cover" referrerPolicy="no-referrer" />
                   ))}
                   <div className="w-12 h-12 rounded-full border-4 border-white bg-school-yellow flex items-center justify-center text-school-blue font-bold text-xs">+200</div>
                 </div>
               </div>
               
-              <div className="bg-school-yellow/10 p-10 rounded-2xl border-2 border-school-yellow/20 flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-school-yellow rounded-2xl flex items-center justify-center text-school-blue mb-6">
+              <div className="bg-school-yellow/10 p-10 rounded-sm border-2 border-school-yellow/20 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-school-yellow rounded-sm flex items-center justify-center text-school-blue mb-6">
                   <Palette className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-heading font-bold mb-4 text-slate-900">Creatividad Sin Límites</h3>
                 <p className="text-slate-700 font-medium">Fomentamos el pensamiento lateral a través del arte y la expresión libre.</p>
               </div>
               
-              <div className="bg-school-red/10 p-10 rounded-2xl border-2 border-school-red/20 flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-school-red rounded-2xl flex items-center justify-center text-white mb-6">
+              <div className="bg-school-red/10 p-10 rounded-sm border-2 border-school-red/20 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-school-red rounded-sm flex items-center justify-center text-white mb-6">
                   <Cpu className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-heading font-bold mb-4 text-slate-900">Tecnología Educativa</h3>
                 <p className="text-slate-700 font-medium">Aulas equipadas con las últimas herramientas digitales para el siglo XXI.</p>
               </div>
               
-              <div className="md:col-span-4 bg-slate-900 text-white p-12 rounded-3xl flex flex-col md:flex-row items-center gap-12">
+              <div className="md:col-span-4 bg-slate-900 text-white p-12 rounded-sm flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1">
                   <h3 className="text-4xl font-heading font-bold mb-6">Educación en Valores Cristianos</h3>
                   <p className="text-xl text-slate-400 leading-relaxed">
@@ -462,11 +488,11 @@ export default function App() {
                   </p>
                 </div>
                 <div className="flex-1 grid grid-cols-2 gap-4">
-                  <div className="bg-white/5 p-6 rounded-3xl text-center">
+                  <div className="bg-white/5 p-6 rounded-sm text-center">
                     <Heart className="w-8 h-8 text-school-red mx-auto mb-2" />
                     <span className="font-bold">Amor</span>
                   </div>
-                  <div className="bg-white/5 p-6 rounded-3xl text-center">
+                  <div className="bg-white/5 p-6 rounded-sm text-center">
                     <Star className="w-8 h-8 text-school-yellow mx-auto mb-2" />
                     <span className="font-bold">Excelencia</span>
                   </div>
@@ -498,9 +524,9 @@ export default function App() {
                   viewport={{ once: true }}
                   whileHover={{ y: -10 }}
                 >
-                  <Card className={`h-full border-4 transition-all shadow-xl rounded-2xl overflow-hidden ${level.color}`}>
+                  <Card className={`h-full border-4 transition-all shadow-xl rounded-sm overflow-hidden ${level.color}`}>
                     <CardHeader className="text-center pb-2">
-                      <div className="mx-auto mb-6 p-5 bg-white rounded-3xl w-fit shadow-lg transform -rotate-3">
+                      <div className="mx-auto mb-6 p-5 bg-white rounded-sm w-fit shadow-lg transform -rotate-3">
                         {level.icon}
                       </div>
                       <Badge className={`${level.accent} text-white mb-4 px-4 py-1 rounded-full text-xs font-bold border-none`}>
@@ -512,7 +538,12 @@ export default function App() {
                       <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                         {level.description}
                       </p>
-                      <Button className={`${level.accent} hover:opacity-90 text-white rounded-2xl w-full py-6 font-bold shadow-lg`}>
+                      <Button 
+                        className={`${level.accent} hover:opacity-90 text-white rounded-sm w-full py-6 font-bold shadow-lg`}
+                        onClick={() => {
+                          toast.success(`El plan de estudios de ${level.title} ha sido enviado a su correo electrónico.`);
+                        }}
+                      >
                         Ver Plan de Estudios
                       </Button>
                     </CardContent>
@@ -539,9 +570,9 @@ export default function App() {
                 <motion.div
                   key={workshop.name}
                   whileHover={{ scale: 1.05, rotate: 2 }}
-                  className={`${workshop.color} p-8 rounded-2xl flex flex-col items-center justify-center text-center gap-4 shadow-xl border-4 border-white/20`}
+                  className={`${workshop.color} p-8 rounded-sm flex flex-col items-center justify-center text-center gap-4 shadow-xl border-4 border-white/20`}
                 >
-                  <div className="bg-white/20 p-4 rounded-2xl">
+                  <div className="bg-white/20 p-4 rounded-sm">
                     {workshop.icon}
                   </div>
                   <span className="font-bold text-sm leading-tight">{workshop.name}</span>
@@ -560,12 +591,14 @@ export default function App() {
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {testimonials.map((t, i) => (
-                <Card key={i} className="rounded-2xl border-none shadow-xl p-8 bg-white relative">
+                <Card key={i} className="rounded-sm border-none shadow-xl p-8 bg-white relative">
                   <Quote className="absolute top-6 right-8 w-12 h-12 text-school-blue/10" />
                   <CardContent className="p-0 space-y-6">
                     <p className="text-lg italic text-muted-foreground leading-relaxed">"{t.text}"</p>
                     <div className="flex items-center gap-4">
-                      <img src={t.avatar} className="w-14 h-14 rounded-2xl object-cover border-2 border-school-yellow" referrerPolicy="no-referrer" />
+                      <div className="w-14 h-14 rounded-sm bg-slate-100 flex items-center justify-center text-school-blue border-2 border-school-yellow/30">
+                        <FontAwesomeIcon icon={t.icon} className="w-6 h-6" />
+                      </div>
                       <div>
                         <h4 className="font-bold text-school-blue">{t.name}</h4>
                         <p className="text-xs font-medium text-muted-foreground">{t.role}</p>
@@ -581,7 +614,7 @@ export default function App() {
         {/* Final CTA */}
         <section className="py-24 relative">
           <div className="container mx-auto px-4">
-            <div className="bg-school-red rounded-3xl p-12 md:p-24 text-center text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-school-red rounded-sm p-12 md:p-24 text-center text-white relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 left-0 w-full h-full bg-doodle opacity-10" />
               <div className="relative z-10 max-w-3xl mx-auto">
                 <h2 className="font-heading text-5xl md:text-7xl font-bold mb-8">¿Listo para unirte a nosotros?</h2>
@@ -589,10 +622,18 @@ export default function App() {
                   Las vacantes son limitadas. Asegura el futuro de tu hijo hoy mismo.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                  <Button size="lg" className="bg-white text-school-red hover:bg-slate-100 text-2xl px-12 py-10 rounded-3xl font-black shadow-2xl transform hover:scale-105 transition-all">
+                  <Button 
+                    size="lg" 
+                    className="bg-white text-school-red hover:bg-slate-100 text-2xl px-12 py-10 rounded-sm font-black shadow-2xl transform hover:scale-105 transition-all"
+                    onClick={() => setIsMatriculaOpen(true)}
+                  >
                     ¡Matricular Ahora!
                   </Button>
-                  <Button size="lg" className="bg-school-yellow text-school-blue hover:bg-yellow-400 text-xl px-10 py-10 rounded-3xl font-black shadow-xl transform hover:scale-105 transition-all">
+                  <Button 
+                    size="lg" 
+                    className="bg-school-yellow text-school-blue hover:bg-yellow-400 text-xl px-10 py-10 rounded-sm font-black shadow-xl transform hover:scale-105 transition-all"
+                    onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}
+                  >
                     Solicitar Información
                   </Button>
                 </div>
@@ -604,7 +645,7 @@ export default function App() {
         {/* Contact Section */}
         <section id="contacto" className="py-24">
           <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-muted/20">
+            <div className="max-w-6xl mx-auto bg-white rounded-sm shadow-2xl overflow-hidden border-4 border-muted/20">
               <div className="flex flex-col lg:flex-row">
                 <div className="flex-1 p-12 md:p-20 space-y-12">
                   <div>
@@ -614,7 +655,7 @@ export default function App() {
                   
                   <div className="space-y-10">
                     <div className="flex items-start gap-6 group">
-                      <div className="bg-school-blue/10 p-5 rounded-xl group-hover:bg-school-blue group-hover:text-white transition-all">
+                      <div className="bg-school-blue/10 p-5 rounded-sm group-hover:bg-school-blue group-hover:text-white transition-all">
                         <MapPin className="w-8 h-8" />
                       </div>
                       <div>
@@ -625,7 +666,7 @@ export default function App() {
                     </div>
                     
                     <div className="flex items-start gap-6 group">
-                      <div className="bg-school-red/10 p-5 rounded-xl group-hover:bg-school-red group-hover:text-white transition-all">
+                      <div className="bg-school-red/10 p-5 rounded-sm group-hover:bg-school-red group-hover:text-white transition-all">
                         <Phone className="w-8 h-8" />
                       </div>
                       <div>
@@ -639,13 +680,19 @@ export default function App() {
                   <div className="pt-8">
                     <p className="font-bold text-lg mb-6">Nuestras Redes:</p>
                     <div className="flex gap-6">
-                      {["f", "i", "w", "y"].map((social) => (
+                      {[
+                        { icon: "f", name: "Facebook" },
+                        { icon: "i", name: "Instagram" },
+                        { icon: "w", name: "WhatsApp" },
+                        { icon: "y", name: "YouTube" }
+                      ].map((social) => (
                         <motion.div 
-                          key={social}
+                          key={social.icon}
                           whileHover={{ y: -5, scale: 1.1 }}
-                          className="w-14 h-14 bg-muted rounded-2xl flex items-center justify-center font-black text-xl hover:bg-school-blue hover:text-white transition-all cursor-pointer shadow-md"
+                          onClick={() => toast.info(`Redireccionando a ${social.name}...`)}
+                          className="w-14 h-14 bg-muted rounded-sm flex items-center justify-center font-black text-xl hover:bg-school-blue hover:text-white transition-all cursor-pointer shadow-md"
                         >
-                          {social}
+                          {social.icon}
                         </motion.div>
                       ))}
                     </div>
@@ -654,13 +701,16 @@ export default function App() {
                 
                 <div className="flex-1 bg-muted/50 relative min-h-[500px]">
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
-                    <div className="w-full h-full bg-white rounded-2xl shadow-inner border-8 border-white flex flex-col items-center justify-center p-8">
+                    <div className="w-full h-full bg-white rounded-sm shadow-inner border-8 border-white flex flex-col items-center justify-center p-8">
                       <div className="w-20 h-20 bg-school-blue/10 rounded-full flex items-center justify-center mb-6">
                         <MapPin className="w-10 h-10 text-school-blue" />
                       </div>
                       <h3 className="font-heading text-2xl font-bold mb-4">Ubicación Estratégica</h3>
                       <p className="text-muted-foreground mb-8">Estamos ubicados en el corazón de Talara Alta, con fácil acceso y seguridad.</p>
-                      <Button className="bg-school-blue text-white rounded-2xl px-8 py-6 font-bold">
+                      <Button 
+                        className="bg-school-blue text-white rounded-sm px-8 py-6 font-bold"
+                        onClick={() => window.open('https://maps.google.com', '_blank')}
+                      >
                         Abrir en Google Maps
                       </Button>
                     </div>
@@ -682,9 +732,13 @@ export default function App() {
             <div className="grid md:grid-cols-4 gap-12 mb-16">
               <div className="col-span-2 space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-school-blue rounded-2xl flex items-center justify-center text-white font-heading font-bold text-2xl">
-                    J
-                  </div>
+                  {landingContent.logoUrl ? (
+                    <img src={landingContent.logoUrl} alt="Logo" className="h-12 w-auto object-contain brightness-0 invert" referrerPolicy="no-referrer" />
+                  ) : (
+                    <div className="w-12 h-12 bg-school-blue rounded-sm flex items-center justify-center text-white font-heading font-bold text-2xl">
+                      J
+                    </div>
+                  )}
                   <span className="text-white font-heading font-bold text-2xl tracking-tight">I.E.P. Las Joyas de Jesucristo</span>
                 </div>
                 <p className="text-lg max-w-md">
@@ -694,18 +748,18 @@ export default function App() {
               <div>
                 <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Enlaces Rápidos</h4>
                 <ul className="space-y-4 font-medium">
-                  <li><a href="#" className="hover:text-white transition-colors">Admisión 2026</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Niveles Educativos</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Talleres</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Calendario Escolar</a></li>
+                  <li><button onClick={() => setIsMatriculaOpen(true)} className="hover:text-white transition-colors text-left">Admisión 2026</button></li>
+                  <li><a href="#niveles" className="hover:text-white transition-colors">Niveles Educativos</a></li>
+                  <li><a href="#talleres" className="hover:text-white transition-colors">Talleres</a></li>
+                  <li><button onClick={() => toast.success("El calendario escolar 2026 ha sido enviado a su correo.")} className="hover:text-white transition-colors text-left">Calendario Escolar</button></li>
                 </ul>
               </div>
               <div>
                 <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Legal</h4>
                 <ul className="space-y-4 font-medium">
-                  <li><a href="#" className="hover:text-white transition-colors">Términos y Condiciones</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Política de Privacidad</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Libro de Reclamaciones</a></li>
+                  <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors text-left">Términos y Condiciones</button></li>
+                  <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors text-left">Política de Privacidad</button></li>
+                  <li><button onClick={() => setIsReclamacionesOpen(true)} className="hover:text-white transition-colors text-left">Libro de Reclamaciones</button></li>
                 </ul>
               </div>
             </div>
@@ -717,6 +771,85 @@ export default function App() {
           </div>
         </footer>
       )}
+      {/* Legal Modals */}
+      <Dialog open={isTermsOpen} onOpenChange={setIsTermsOpen}>
+        <DialogContent className="sm:max-w-[600px] rounded-sm max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-school-blue">Términos y Condiciones</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
+            <p className="font-bold">1. Aceptación de los Términos</p>
+            <p>Al acceder y utilizar este sitio web de la I.E.P. Las Joyas de Jesucristo, usted acepta estar sujeto a estos términos y condiciones de uso, todas las leyes y reglamentos aplicables.</p>
+            <p className="font-bold">2. Uso de la Licencia</p>
+            <p>Se concede permiso para descargar temporalmente una copia de los materiales (información o software) en el sitio web para visualización transitoria personal y no comercial solamente.</p>
+            <p className="font-bold">3. Responsabilidad</p>
+            <p>Los materiales en el sitio web se proporcionan "tal cual". El colegio no ofrece garantías, expresas o implícitas, y por la presente renuncia y niega todas las otras garantías.</p>
+            <p className="font-bold">4. Limitaciones</p>
+            <p>En ningún caso el colegio o sus proveedores serán responsables de cualquier daño surgido del uso o la imposibilidad de utilizar los materiales en el sitio.</p>
+          </div>
+          <Button onClick={() => setIsTermsOpen(false)} className="bg-school-blue w-full mt-4">Cerrar</Button>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPrivacyOpen} onOpenChange={setIsPrivacyOpen}>
+        <DialogContent className="sm:max-w-[600px] rounded-sm">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-school-blue">Política de Privacidad</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
+            <p>Su privacidad es muy importante para nosotros. En consecuencia, hemos desarrollado esta Política para que usted comprenda cómo recopilamos, usamos, comunicamos y divulgamos la información personal.</p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Antes o en el momento de recopilar información personal, identificaremos los fines para los que se recopila la información.</li>
+              <li>Recopilaremos y utilizaremos la información personal únicamente con el objetivo de cumplir con los fines especificados por nosotros.</li>
+              <li>Solo conservaremos la información personal durante el tiempo que sea necesario para el cumplimiento de dichos fines.</li>
+              <li>Protegeremos la información personal mediante garantías de seguridad razonables contra pérdida o robo.</li>
+            </ul>
+          </div>
+          <Button onClick={() => setIsPrivacyOpen(false)} className="bg-school-blue w-full mt-4">Cerrar</Button>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isReclamacionesOpen} onOpenChange={setIsReclamacionesOpen}>
+        <DialogContent className="sm:max-w-[500px] rounded-sm">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-school-red">Libro de Reclamaciones</DialogTitle>
+            <DialogDescription>
+              Conforme a lo establecido en el Código de Protección y Defensa del Consumidor.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            toast.success("Su reclamo ha sido registrado. Le enviaremos una copia a su correo.");
+            setIsReclamacionesOpen(false);
+          }} className="space-y-4 mt-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>DNI / CE</Label>
+                <Input required placeholder="Número de documento" />
+              </div>
+              <div className="space-y-2">
+                <Label>Teléfono</Label>
+                <Input required placeholder="987654321" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Nombre Completo</Label>
+              <Input required placeholder="Nombres y apellidos" />
+            </div>
+            <div className="space-y-2">
+              <Label>Detalle del Reclamo o Queja</Label>
+              <textarea 
+                required 
+                className="w-full min-h-[100px] rounded-sm border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-school-red outline-none"
+                placeholder="Describa lo sucedido..."
+              />
+            </div>
+            <Button type="submit" className="w-full bg-school-red hover:bg-school-red/90 font-bold h-12">
+              Enviar Reclamo
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

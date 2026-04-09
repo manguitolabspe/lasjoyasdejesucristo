@@ -39,7 +39,7 @@ export const LoginModal = ({ children }: { children: React.ReactNode }) => {
     // Simulate network delay
     setTimeout(() => {
       login(data.email, 'parent');
-      toast.success(isRegister ? "Cuenta creada correctamente (DEMO)" : "¡Bienvenido de nuevo (DEMO)!");
+      toast.success(isRegister ? "Cuenta creada correctamente" : "¡Bienvenido de nuevo!");
       setOpen(false);
       setLoading(false);
     }, 1000);
@@ -55,8 +55,8 @@ export const LoginModal = ({ children }: { children: React.ReactNode }) => {
     };
     
     setTimeout(() => {
-      login(emails[role] || 'demo@joyas.edu.pe', role);
-      toast.success(`Simulando rol: ${role.toUpperCase()}`);
+      login(emails[role] || 'usuario@joyas.edu.pe', role);
+      toast.success(`Sesión iniciada como ${role === 'superadmin' ? 'Administrador' : role === 'teacher' ? 'Docente' : role === 'parent' ? 'Padre' : 'Asistente'}`);
       setOpen(false);
       setLoading(false);
     }, 800);
@@ -67,23 +67,23 @@ export const LoginModal = ({ children }: { children: React.ReactNode }) => {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] rounded-[2rem]">
+      <DialogContent className="sm:max-w-[425px] rounded-sm">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl text-school-blue">
             {isRegister ? "Crear Cuenta" : "Iniciar Sesión"}
           </DialogTitle>
           <DialogDescription>
             {isRegister 
-              ? "Regístrate para acceder al sistema del colegio (Versión Demo)." 
-              : "Ingresa a tu cuenta para gestionar el colegio o ver las notas de tus hijos (Versión Demo)."}
+              ? "Regístrate para acceder al sistema del colegio." 
+              : "Ingresa a tu cuenta para gestionar el colegio o ver las notas de tus hijos."}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
           <div className="grid grid-cols-2 gap-2 mb-2">
-            <Button variant="outline" size="sm" onClick={() => simulateRole('superadmin')} className="text-[10px] h-8 rounded-lg border-school-red text-school-red hover:bg-school-red/5">Admin</Button>
-            <Button variant="outline" size="sm" onClick={() => simulateRole('teacher')} className="text-[10px] h-8 rounded-lg border-school-blue text-school-blue hover:bg-school-blue/5">Docente</Button>
-            <Button variant="outline" size="sm" onClick={() => simulateRole('parent')} className="text-[10px] h-8 rounded-lg border-school-green text-school-green hover:bg-school-green/5">Padre</Button>
-            <Button variant="outline" size="sm" onClick={() => simulateRole('assistant')} className="text-[10px] h-8 rounded-lg border-school-yellow text-school-yellow hover:bg-school-yellow/5">Asistente</Button>
+            <Button variant="outline" size="sm" onClick={() => simulateRole('superadmin')} className="text-[10px] h-8 rounded-sm border-school-red text-school-red hover:bg-school-red/5">Admin</Button>
+            <Button variant="outline" size="sm" onClick={() => simulateRole('teacher')} className="text-[10px] h-8 rounded-sm border-school-blue text-school-blue hover:bg-school-blue/5">Docente</Button>
+            <Button variant="outline" size="sm" onClick={() => simulateRole('parent')} className="text-[10px] h-8 rounded-sm border-school-green text-school-green hover:bg-school-green/5">Padre</Button>
+            <Button variant="outline" size="sm" onClick={() => simulateRole('assistant')} className="text-[10px] h-8 rounded-sm border-school-yellow text-school-yellow hover:bg-school-yellow/5">Asistente</Button>
           </div>
           
           <div className="relative">
@@ -99,20 +99,20 @@ export const LoginModal = ({ children }: { children: React.ReactNode }) => {
             {isRegister && (
               <div className="space-y-2">
                 <Label htmlFor="displayName">Nombre Completo</Label>
-                <Input id="displayName" placeholder="Juan Pérez" {...register('displayName')} className="rounded-xl" />
+                <Input id="displayName" placeholder="Juan Pérez" {...register('displayName')} className="rounded-sm" />
               </div>
             )}
             <div className="space-y-2">
               <Label htmlFor="email">Correo Electrónico</Label>
-              <Input id="email" type="email" placeholder="ejemplo@correo.com" {...register('email')} className="rounded-xl" />
+              <Input id="email" type="email" placeholder="ejemplo@correo.com" {...register('email')} className="rounded-sm" />
               {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" type="password" {...register('password')} className="rounded-xl" />
+              <Input id="password" type="password" {...register('password')} className="rounded-sm" />
               {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
             </div>
-            <Button type="submit" className="w-full bg-school-blue hover:bg-school-blue/90 rounded-xl" disabled={loading}>
+            <Button type="submit" className="w-full bg-school-blue hover:bg-school-blue/90 rounded-sm" disabled={loading}>
               {loading ? "Cargando..." : (isRegister ? "Registrarse" : "Entrar")}
             </Button>
           </form>
