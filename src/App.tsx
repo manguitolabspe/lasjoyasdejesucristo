@@ -8,6 +8,7 @@ import { Levels } from "./pages/Levels";
 import { Workshops } from "./pages/Workshops";
 import { Contact } from "./pages/Contact";
 import { Team } from "./pages/Team";
+import { VirtualClassroom } from "./pages/VirtualClassroom";
 import { Dashboard } from "./components/Dashboard";
 import { useAuth } from "./AuthContext";
 
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/niveles" element={<Levels />} />
               <Route path="/talleres" element={<Workshops />} />
               <Route path="/equipo" element={<Team />} />
+              <Route path="/aula-virtual" element={<VirtualClassroom />} />
               <Route path="/contacto" element={<Contact />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </>
@@ -42,6 +44,7 @@ export default function App() {
             <>
               {/* Protected Routes */}
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/aula-virtual" element={<VirtualClassroom />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </>
           )}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -24,6 +25,7 @@ import {
   MapPin,
   Calendar,
   LogOut,
+  TrendingUp,
   X as CloseIcon,
   School,
   CheckCircle2,
@@ -38,6 +40,19 @@ import {
   Clock,
   User
 } from 'lucide-react';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  LineChart, 
+  Line, 
+  AreaChart, 
+  Area 
+} from 'recharts';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -49,6 +64,7 @@ import {
 
 export const Dashboard = () => {
   const { user, userData, logout } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -198,6 +214,21 @@ export const Dashboard = () => {
     logoUrl: '/logo.webp'
   });
 
+  const performanceData = [
+    { name: 'Mar', promedio: 14.5, asistencia: 85 },
+    { name: 'Abr', promedio: 15.8, asistencia: 88 },
+    { name: 'May', promedio: 16.2, asistencia: 92 },
+    { name: 'Jun', promedio: 15.5, asistencia: 90 },
+    { name: 'Jul', promedio: 17.1, asistencia: 95 },
+  ];
+
+  const financialData = [
+    { name: 'Ene', ingresos: 45000, gastos: 32000 },
+    { name: 'Feb', ingresos: 52000, gastos: 34000 },
+    { name: 'Mar', ingresos: 48000, gastos: 31000 },
+    { name: 'Abr', ingresos: 61000, gastos: 35000 },
+  ];
+
   const handleUpdateContent = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Contenido actualizado correctamente");
@@ -212,12 +243,20 @@ export const Dashboard = () => {
     { id: 'grades', label: 'Notas', icon: <ClipboardList className="w-5 h-5" />, roles: ['superadmin', 'admin', 'teacher', 'parent'] },
     { id: 'payments', label: 'Pagos', icon: <CreditCard className="w-5 h-5" />, roles: ['superadmin', 'admin', 'assistant', 'parent'] },
     { id: 'attendance', label: 'Asistencia', icon: <CheckCircle2 className="w-5 h-5" />, roles: ['superadmin', 'admin', 'teacher'] },
+    { id: 'reports', label: 'Reportes', icon: <TrendingUp className="w-5 h-5" />, roles: ['superadmin', 'admin'] },
+    { id: 'aula-virtual', label: 'Aula Virtual', icon: <BookOpen className="w-5 h-5" />, roles: ['superadmin', 'admin', 'teacher', 'parent'] },
     { id: 'schedule', label: 'Horario', icon: <Calendar className="w-5 h-5" />, roles: ['superadmin', 'admin', 'teacher', 'parent'] },
     { id: 'cms', label: 'Gestión Web', icon: <FileText className="w-5 h-5" />, roles: ['superadmin', 'admin'] },
     { id: 'settings', label: 'Configuración', icon: <Settings className="w-5 h-5" />, roles: ['superadmin', 'admin'] },
   ];
 
   const filteredSidebar = sidebarItems.filter(item => item.roles.includes(userData?.role));
+
+  useEffect(() => {
+    if (activeTab === 'aula-virtual') {
+      navigate('/aula-virtual');
+    }
+  }, [activeTab, navigate]);
 
   return (
     <div className="flex flex-col lg:flex-row min-h-[700px] bg-white rounded-sm overflow-hidden shadow-2xl border border-slate-200">
@@ -344,6 +383,63 @@ export const Dashboard = () => {
             </div>
 
             {/* Role Specific Section */}
+            {(userData?.role === 'superadmin' || userData?.role === 'admin') && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <Card className="rounded-sm border-none shadow-xl bg-white overflow-hidden">
+                  <CardHeader className="border-b border-slate-50 p-6">
+                    <CardTitle className="text-lg font-black flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5 text-school-blue" /> Rendimiento Académico Global
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="h-[300px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={performanceData}>
+                          <defs>
+                            <linearGradient id="colorPromedio" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#003366" stopOpacity={0.1}/>
+                              <stop offset="95%" stopColor="#003366" stopOpacity={0}/>
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#64748b'}} />
+                          <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#64748b'}} />
+                          <Tooltip 
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                          />
+                          <Area type="monotone" dataKey="promedio" stroke="#003366" strokeWidth={3} fillOpacity={1} fill="url(#colorPromedio)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="rounded-sm border-none shadow-xl bg-white overflow-hidden">
+                  <CardHeader className="border-b border-slate-50 p-6">
+                    <CardTitle className="text-lg font-black flex items-center gap-2">
+                      <Coins className="w-5 h-5 text-school-yellow" /> Resumen Financiero (Pensiones)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="h-[300px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={financialData}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#64748b'}} />
+                          <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fill: '#64748b'}} />
+                          <Tooltip 
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                          />
+                          <Bar dataKey="ingresos" fill="#FFD700" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="gastos" fill="#003366" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {userData?.role === 'parent' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Card className="rounded-sm border-none shadow-xl bg-white overflow-hidden">
@@ -1089,6 +1185,77 @@ export const Dashboard = () => {
                     Guardar Cambios en la Web
                   </Button>
                 </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'reports' && (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="rounded-sm border-none shadow-xl bg-white p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-10 h-10 bg-school-blue/10 rounded-sm flex items-center justify-center text-school-blue">
+                    <Download className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-bold">Reporte de Notas</h4>
+                </div>
+                <p className="text-xs text-slate-500 mb-6">Genera un consolidado de notas por grado y sección.</p>
+                <Button className="w-full bg-slate-900 hover:bg-slate-800 rounded-sm font-bold" onClick={() => toast.success("Generando reporte de notas...")}>Descargar PDF</Button>
+              </Card>
+              <Card className="rounded-sm border-none shadow-xl bg-white p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-10 h-10 bg-school-green/10 rounded-sm flex items-center justify-center text-school-green">
+                    <Download className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-bold">Reporte de Asistencia</h4>
+                </div>
+                <p className="text-xs text-slate-500 mb-6">Consolidado mensual de asistencia de alumnos y docentes.</p>
+                <Button className="w-full bg-slate-900 hover:bg-slate-800 rounded-sm font-bold" onClick={() => toast.success("Generando reporte de asistencia...")}>Descargar Excel</Button>
+              </Card>
+              <Card className="rounded-sm border-none shadow-xl bg-white p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-10 h-10 bg-school-yellow/10 rounded-sm flex items-center justify-center text-school-yellow">
+                    <Download className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-bold">Reporte Económico</h4>
+                </div>
+                <p className="text-xs text-slate-500 mb-6">Estado de pensiones y balance de ingresos/egresos.</p>
+                <Button className="w-full bg-slate-900 hover:bg-slate-800 rounded-sm font-bold" onClick={() => toast.success("Generando reporte económico...")}>Descargar PDF</Button>
+              </Card>
+            </div>
+            
+            <Card className="rounded-sm border-none shadow-xl bg-white overflow-hidden">
+              <CardHeader className="border-b border-slate-50 p-6">
+                <CardTitle className="text-lg font-black">Historial de Reportes Generados</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <table className="w-full text-left">
+                  <thead className="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-widest font-black">
+                    <tr>
+                      <th className="px-6 py-4">Nombre del Reporte</th>
+                      <th className="px-6 py-4">Fecha</th>
+                      <th className="px-6 py-4">Usuario</th>
+                      <th className="px-6 py-4">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {[
+                      { name: 'Consolidado_Notas_Abril.pdf', date: '2024-04-10', user: 'Admin Principal' },
+                      { name: 'Asistencia_Marzo_5toA.xlsx', date: '2024-04-01', user: 'Prof. María' },
+                      { name: 'Balance_Pensiones_Q1.pdf', date: '2024-03-31', user: 'Admin Principal' },
+                    ].map((report, i) => (
+                      <tr key={i} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-slate-900">{report.name}</td>
+                        <td className="px-6 py-4 text-sm text-slate-500">{report.date}</td>
+                        <td className="px-6 py-4 text-sm text-slate-500">{report.user}</td>
+                        <td className="px-6 py-4">
+                          <Button variant="ghost" size="sm" className="text-school-blue font-bold">Descargar</Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </CardContent>
             </Card>
           </div>

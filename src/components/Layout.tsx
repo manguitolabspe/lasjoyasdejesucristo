@@ -6,7 +6,8 @@ import {
   X, 
   MapPin, 
   Phone, 
-  SeparatorHorizontal 
+  SeparatorHorizontal,
+  ChevronDown
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Separator } from "../../components/ui/separator";
@@ -35,11 +36,22 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const navItems = [
     { name: "Inicio", path: "/" },
-    { name: "Nosotros", path: "/nosotros" },
-    { name: "Niveles", path: "/niveles" },
-    { name: "Talleres", path: "/talleres" },
-    { name: "Equipo", path: "/equipo" },
-    { name: "Contacto", path: "/contacto" },
+    { 
+      name: "Institución", 
+      submenu: [
+        { name: "Nosotros", path: "/nosotros" },
+        { name: "Nuestro Equipo", path: "/equipo" },
+        { name: "Contacto", path: "/contacto" },
+      ]
+    },
+    { 
+      name: "Académico", 
+      submenu: [
+        { name: "Niveles", path: "/niveles" },
+        { name: "Talleres", path: "/talleres" },
+      ]
+    },
+    { name: "Aula Virtual", path: "/aula-virtual" },
   ];
 
   if (user) return <>{children}</>;
@@ -62,14 +74,35 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           
           <div className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
-              <Link 
-                key={item.name}
-                to={item.path} 
-                className={`text-sm font-bold transition-colors relative group ${location.pathname === item.path ? 'text-school-blue' : 'hover:text-school-blue'}`}
-              >
-                {item.name}
-                <span className={`absolute -bottom-1 left-0 h-1 bg-school-yellow transition-all rounded-full ${location.pathname === item.path ? 'w-full' : 'w-0 group-hover:w-full'}`} />
-              </Link>
+              <div key={item.name} className="relative group">
+                {item.submenu ? (
+                  <div className="flex items-center gap-1 cursor-pointer py-8 text-sm font-bold hover:text-school-blue transition-colors">
+                    {item.name}
+                    <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform" />
+                    
+                    {/* Dropdown Menu */}
+                    <div className="absolute top-full left-0 w-48 bg-white shadow-xl rounded-xl border border-slate-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all translate-y-2 group-hover:translate-y-0 z-50">
+                      {item.submenu.map((sub) => (
+                        <Link
+                          key={sub.name}
+                          to={sub.path}
+                          className={`block px-4 py-2 text-sm font-bold hover:bg-slate-50 hover:text-school-blue transition-colors ${location.pathname === sub.path ? 'text-school-blue bg-slate-50' : 'text-slate-600'}`}
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link 
+                    to={item.path!} 
+                    className={`text-sm font-bold transition-colors relative group py-8 block ${location.pathname === item.path ? 'text-school-blue' : 'hover:text-school-blue'}`}
+                  >
+                    {item.name}
+                    <span className={`absolute bottom-6 left-0 h-1 bg-school-yellow transition-all rounded-full ${location.pathname === item.path ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                  </Link>
+                )}
+              </div>
             ))}
           </div>
 
@@ -144,18 +177,35 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden bg-white border-b border-school-blue/10 overflow-hidden"
             >
-              <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
+              <div className="container mx-auto px-4 py-6 flex flex-col gap-2">
                 {navItems.map((item) => (
-                  <Link 
-                    key={item.name} 
-                    to={item.path} 
-                    className={`font-bold py-2 ${location.pathname === item.path ? 'text-school-blue' : 'text-slate-600'}`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
+                  <div key={item.name} className="flex flex-col">
+                    {item.submenu ? (
+                      <div className="space-y-2">
+                        <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 px-2 mt-4">{item.name}</p>
+                        {item.submenu.map((sub) => (
+                          <Link 
+                            key={sub.name} 
+                            to={sub.path} 
+                            className={`font-bold py-2 px-2 rounded-lg ${location.pathname === sub.path ? 'text-school-blue bg-school-blue/5' : 'text-slate-600'}`}
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <Link 
+                        to={item.path!} 
+                        className={`font-bold py-3 px-2 rounded-lg ${location.pathname === item.path ? 'text-school-blue bg-school-blue/5' : 'text-slate-600'}`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </div>
                 ))}
-                <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
+                <div className="flex flex-col gap-3 pt-6 mt-4 border-t border-slate-100">
                   <LoginModal>
                     <Button variant="outline" className="w-full rounded-xl font-bold border-school-blue text-school-blue">
                       Entrar
@@ -199,6 +249,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               <ul className="space-y-4 font-medium">
                 <li><button onClick={() => setIsMatriculaOpen(true)} className="hover:text-white transition-colors text-left">Admisión 2026</button></li>
                 <li><Link to="/niveles" className="hover:text-white transition-colors">Niveles Educativos</Link></li>
+                <li><Link to="/aula-virtual" className="hover:text-white transition-colors">Aula Virtual</Link></li>
                 <li><Link to="/talleres" className="hover:text-white transition-colors">Talleres</Link></li>
                 <li><button onClick={() => toast.success("El calendario escolar 2026 ha sido enviado a su correo.")} className="hover:text-white transition-colors text-left">Calendario Escolar</button></li>
               </ul>

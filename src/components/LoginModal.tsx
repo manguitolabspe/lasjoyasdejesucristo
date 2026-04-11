@@ -56,7 +56,11 @@ export const LoginModal = ({ children }: { children: React.ReactNode }) => {
     
     setTimeout(() => {
       login(emails[role] || 'usuario@joyas.edu.pe', role);
-      toast.success(`Sesión iniciada como ${role === 'superadmin' ? 'Administrador' : role === 'teacher' ? 'Docente' : role === 'parent' ? 'Padre' : 'Asistente'}`);
+      const roleName = role === 'superadmin' ? 'Administrador' : 
+                       role === 'teacher' ? 'Docente' : 
+                       role === 'student' ? 'Alumno' : 
+                       role === 'parent' ? 'Padre' : 'Asistente';
+      toast.success(`Sesión iniciada como ${roleName}`);
       setOpen(false);
       setLoading(false);
     }, 800);
@@ -79,10 +83,11 @@ export const LoginModal = ({ children }: { children: React.ReactNode }) => {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
-          <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="grid grid-cols-3 gap-2 mb-2">
             <Button variant="outline" size="sm" onClick={() => simulateRole('superadmin')} className="text-[10px] h-8 rounded-sm border-school-red text-school-red hover:bg-school-red/5">Admin</Button>
             <Button variant="outline" size="sm" onClick={() => simulateRole('teacher')} className="text-[10px] h-8 rounded-sm border-school-blue text-school-blue hover:bg-school-blue/5">Docente</Button>
-            <Button variant="outline" size="sm" onClick={() => simulateRole('parent')} className="text-[10px] h-8 rounded-sm border-school-green text-school-green hover:bg-school-green/5">Padre</Button>
+            <Button variant="outline" size="sm" onClick={() => simulateRole('student')} className="text-[10px] h-8 rounded-sm border-school-green text-school-green hover:bg-school-green/5">Alumno</Button>
+            <Button variant="outline" size="sm" onClick={() => simulateRole('parent')} className="text-[10px] h-8 rounded-sm border-slate-400 text-slate-400 hover:bg-slate-50">Padre</Button>
             <Button variant="outline" size="sm" onClick={() => simulateRole('assistant')} className="text-[10px] h-8 rounded-sm border-school-yellow text-school-yellow hover:bg-school-yellow/5">Asistente</Button>
           </div>
           

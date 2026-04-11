@@ -11,7 +11,10 @@ import {
   MapPin, 
   Phone, 
   Palette, 
-  Cpu 
+  Cpu,
+  Video,
+  BookOpen,
+  LayoutDashboard
 } from "lucide-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserTie, faUserCircle } from '@fortawesome/free-solid-svg-icons';
@@ -233,6 +236,62 @@ export const Home = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Virtual Classroom Preview */}
+      <section className="py-24 bg-slate-900 text-white overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <div className="flex-1 space-y-8">
+              <Badge className="bg-school-blue text-white border-none px-6 py-2 rounded-full font-bold">
+                Tecnología Educativa
+              </Badge>
+              <h2 className="text-5xl md:text-6xl font-heading font-black leading-tight">
+                Aula Virtual <br /> <span className="text-school-yellow">Joyista 2.0</span>
+              </h2>
+              <p className="text-xl text-slate-400 leading-relaxed">
+                Nuestra plataforma de vanguardia permite que el aprendizaje no se detenga. Clases en vivo, materiales descargables y seguimiento en tiempo real.
+              </p>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="flex items-center gap-3">
+                  <Video className="text-school-red w-6 h-6" />
+                  <span className="font-bold">Clases en Vivo</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <BookOpen className="text-school-blue w-6 h-6" />
+                  <span className="font-bold">Biblioteca Digital</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <LayoutDashboard className="text-school-yellow w-6 h-6" />
+                  <span className="font-bold">Panel del Alumno</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="text-school-green w-6 h-6" />
+                  <span className="font-bold">Tareas Online</span>
+                </div>
+              </div>
+              <Button 
+                onClick={() => window.location.href = '/aula-virtual'}
+                className="bg-white text-slate-900 hover:bg-school-yellow hover:text-school-blue px-10 py-8 rounded-2xl text-xl font-black shadow-2xl shadow-white/5"
+              >
+                Explorar Aula Virtual
+              </Button>
+            </div>
+            <div className="flex-1 relative">
+              <div className="bg-slate-800 p-4 rounded-3xl shadow-2xl border-8 border-slate-700 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                <img 
+                  src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800" 
+                  alt="Aula Virtual" 
+                  className="rounded-2xl w-full h-auto"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="absolute -bottom-10 -left-10 bg-school-blue p-6 rounded-2xl shadow-xl animate-bounce">
+                <Sparkles className="w-10 h-10 text-white" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
