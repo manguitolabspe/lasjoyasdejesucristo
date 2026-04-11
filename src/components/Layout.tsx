@@ -231,7 +231,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </main>
 
-      <footer className="bg-slate-950 text-slate-500 py-20 relative overflow-hidden">
+      <footer className="bg-slate-950 text-slate-400 py-20 relative overflow-hidden">
         <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-school-blue via-school-yellow to-school-red" />
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
@@ -240,26 +240,26 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 <img src="/logo.webp" alt="Logo" className="h-12 w-auto object-contain brightness-0 invert" referrerPolicy="no-referrer" />
                 <span className="text-white font-heading font-bold text-2xl tracking-tight">I.E.P. Las Joyas de Jesucristo</span>
               </div>
-              <p className="text-lg max-w-md">
+              <p className="text-lg max-w-md text-slate-300">
                 Comprometidos con la formación de ciudadanos íntegros, competentes y con temor de Dios desde hace 34 años.
               </p>
             </div>
             <div>
               <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Enlaces Rápidos</h4>
               <ul className="space-y-4 font-medium">
-                <li><button onClick={() => setIsMatriculaOpen(true)} className="hover:text-white transition-colors text-left">Admisión 2026</button></li>
-                <li><Link to="/niveles" className="hover:text-white transition-colors">Niveles Educativos</Link></li>
-                <li><Link to="/aula-virtual" className="hover:text-white transition-colors">Aula Virtual</Link></li>
-                <li><Link to="/talleres" className="hover:text-white transition-colors">Talleres</Link></li>
-                <li><button onClick={() => toast.success("El calendario escolar 2026 ha sido enviado a su correo.")} className="hover:text-white transition-colors text-left">Calendario Escolar</button></li>
+                <li><button onClick={() => setIsMatriculaOpen(true)} className="hover:text-white transition-colors text-left text-slate-400">Admisión 2026</button></li>
+                <li><Link to="/niveles" className="hover:text-white transition-colors text-slate-400">Niveles Educativos</Link></li>
+                <li><Link to="/aula-virtual" className="hover:text-white transition-colors text-slate-400">Aula Virtual</Link></li>
+                <li><Link to="/talleres" className="hover:text-white transition-colors text-slate-400">Talleres</Link></li>
+                <li><button onClick={() => toast.success("El calendario escolar 2026 ha sido enviado a su correo.")} className="hover:text-white transition-colors text-left text-slate-400">Calendario Escolar</button></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Legal</h4>
               <ul className="space-y-4 font-medium">
-                <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors text-left">Términos y Condiciones</button></li>
-                <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors text-left">Política de Privacidad</button></li>
-                <li><button onClick={() => setIsReclamacionesOpen(true)} className="hover:text-white transition-colors text-left">Libro de Reclamaciones</button></li>
+                <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors text-left text-slate-400">Términos y Condiciones</button></li>
+                <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors text-left text-slate-400">Política de Privacidad</button></li>
+                <li><button onClick={() => setIsReclamacionesOpen(true)} className="hover:text-white transition-colors text-left text-slate-400">Libro de Reclamaciones</button></li>
               </ul>
             </div>
           </div>

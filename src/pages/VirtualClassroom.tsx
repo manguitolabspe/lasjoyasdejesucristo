@@ -155,7 +155,7 @@ export const VirtualClassroom = () => {
                         Iniciar Sesión
                       </Button>
                     </LoginModal>
-                    <Button variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 px-10 py-8 rounded-2xl text-xl font-bold">
+                    <Button className="bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 px-10 py-8 rounded-2xl text-xl font-black transition-all">
                       Guía del Alumno
                     </Button>
                   </div>
